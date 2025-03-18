@@ -1,10 +1,6 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
     <h1>Улюблені фільми</h1>
     {% for film in favourite_films %}
             <hr>    
@@ -13,5 +9,4 @@
             <p>{{film.description}}</p>
             <p><a href="">Видалити з улюбленого</a></p>
     {% endfor %}
-</body>
-</html>
+{% endblock %}
