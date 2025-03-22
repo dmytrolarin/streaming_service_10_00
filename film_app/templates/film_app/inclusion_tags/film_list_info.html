@@ -1,0 +1,11 @@
+{% for film in list_films %}
+    <hr>    
+    <h2>{{film.name}}</h2>
+    <p><img src="{{ film.preview.url }}"></p>
+    <p>{{film.description}}</p>
+    {% if is_page_favourites %}
+        <p><button class = "remove-from-favourite" value="">Видалити з улюбленого</button></p>
+    {% else %}
+        <p><button class = "add-to-favourite" value="{% url 'add_to_favourite' film.pk %}">Додати до улюбленого</button></p>
+    {% endif %}
+{% endfor %}

@@ -4,7 +4,7 @@ from .models import Film
 
 def render_all_films(request):
     all_films = Film.objects.all()
-    return render(request, "film_app/all_films.html", {"all_films" : all_films})
+    return render(request, "film_app/all_films.html", {"list_films" : all_films, 'is_page_favourites':False})
 
 # Функція додає фільм в улюблені через кукі.
 def add_to_favourite(request, film_id):
@@ -17,6 +17,7 @@ def add_to_favourite(request, film_id):
         # Зберігаємо кукі з pk улюблених фільмів та задаємо параметр max_age, який відповідає за "час життя" куків у секундах
         response.set_cookie("favourite_film", film_id, max_age= 3600)
     else:
+        
         # Конвертуємо рядок у список з pk улюблених фільмів
         favourites_list = favourites_from_cookie.split(' ')
         # створюємо умову яка первіряе чи pk фільму є у списку
@@ -41,4 +42,4 @@ def render_favourites(request):
         # Беремо  об'єкти з моделі Film, якщо їх pk є в списку
         favourite_films = Film.objects.filter(pk__in = favourites_list_pks)
     # Рендеримо сторінку
-    return render(request, "film_app/favourites.html", context={'favourite_films': favourite_films})
+    return render(request, "film_app/favourites.html", context={'list_films': favourite_films, 'is_page_favourites':True})
