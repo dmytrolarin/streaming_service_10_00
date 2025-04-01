@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 {% load customtags %}
+{% load static %}
 
 {% block content %}
     <h1>Улюблені фільми</h1>
     {% film_list_info %}
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'film_app/js/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'film_app/js/ajax.js' %}"></script>
 {% endblock %}

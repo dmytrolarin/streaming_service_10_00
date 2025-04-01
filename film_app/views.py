@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Film
+from django.http import JsonResponse
+import json
 # Create your views here.
 
 def render_all_films(request):
@@ -8,24 +10,49 @@ def render_all_films(request):
 
 # Функція додає фільм в улюблені через кукі.
 def add_to_favourite(request, film_id):
-    # Стоврення об'єкту відповіді (ця відповідь перенаправляє користувача на сторінку з усіма фільмами)
-    response = redirect("all_films")
+    # Стоврення об'єкту відповіді (JsonResponse надсилає відповідь у форматі Json, тобто дані у форматі "ключ-значення")
+    response = JsonResponse({})
     #  Отримує рядок з pk (id) улюблених фільмів з кукі 
     favourites_from_cookie = request.COOKIES.get('favourite_film')
+    # Кількість улюблених фільмів
+    count_favourite_films = 1
     #Якщо немає куків (якщо у користувача не збережно улюблені фільми)
     if not favourites_from_cookie:
         # Зберігаємо кукі з pk улюблених фільмів та задаємо параметр max_age, який відповідає за "час життя" куків у секундах
         response.set_cookie("favourite_film", film_id, max_age= 3600)
     else:
-        
         # Конвертуємо рядок у список з pk улюблених фільмів
         favourites_list = favourites_from_cookie.split(' ')
+        # Кількість улюблених фільмів формується на основі кільксоті елментів у списку з pk улюблених фільмів
+        count_favourite_films = len(favourites_list)
         # створюємо умову яка первіряе чи pk фільму є у списку
         if str(film_id) not in favourites_list:
             # додаемо pk нового улюбленого фільм у рядок для кукі
             updated_cookie = f"{favourites_from_cookie} {film_id}"
+            # Збільшуємо кількість улюблюних фільмів на 1
+            count_favourite_films += 1
             # оновлюємо кукі
             response.set_cookie("favourite_film", updated_cookie, max_age= 3600)
+    # Здаємо дані, що будуть передані у відповіді сервера клієнту (дані будуть конвертовані у рядок json)
+    response.content = json.dumps({"count_favourite_films": count_favourite_films})
+    # Повертаємо відповідь
+    return response
+
+def remove_from_favourite(request, film_id):
+    # Стоврення об'єкту відповіді (ця відповідь перенаправляє користувача на сторінку з усіма фільмами)
+    response = redirect("all_films")
+    #  Отримує рядок з pk (id) улюблених фільмів з кукі 
+    favourites_from_cookie = request.COOKIES.get('favourite_film')
+    # Якщо рядок з куками є
+    if favourites_from_cookie:
+        # Конверуємо рядок з COOKIE у список з pk улюблених фільмів
+        favourites_list = favourites_from_cookie.split(' ')
+        # Видаляємо зі списку id відповідного фільму
+        favourites_list.remove(str(film_id))
+        # Конвертуємо список у рядок, розділяючи кожний елемент пробілом
+        updated_cookie = ' '.join(favourites_list)
+        # Оновлюємо кукі
+        response.set_cookie("favourite_film", updated_cookie, max_age=3600)
     # Повертаємо відповідь
     return response
 

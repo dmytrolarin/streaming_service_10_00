@@ -10,7 +10,7 @@
     <header>
         <nav>
             <a href="{% url 'all_films' %}">Усі фільми</a>
-            <a href="{% url 'favourite_films' %}">Улюблені фільми {% count_favourite_films request %}</a>
+            <a href="{% url 'favourite_films' %}">Улюблені фільми (<span id = "countFavouriteFilms">{% count_favourite_films request %}</span>)</a>
         </nav>
     </header>
     {% block content %}

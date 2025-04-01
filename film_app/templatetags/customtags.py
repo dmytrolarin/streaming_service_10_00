@@ -1,6 +1,7 @@
 from django import template
 from film_app.models import Film
 
+
 # Об'єкт, що відповідає за реєстрацію тегу
 register = template.Library()
 
@@ -17,7 +18,7 @@ def count_favourite_films(request):
         # Розділяємо рядок по пробілам, утсорюючи список
         favourite_films_list = favourites_from_cookie.split(" ")
         # отримуєм кількість улюбених фільмів
-        count_favourite_films = f" ({len(favourite_films_list)})"
+        count_favourite_films = len(favourite_films_list)
     # повертаємо кількість улюбених фільмів
     return count_favourite_films
 
