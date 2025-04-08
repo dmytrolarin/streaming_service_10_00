@@ -2,14 +2,22 @@
 {% load static %}
 {% load customtags %}
 
+
 {% block content %}
     <h1>Усі Фільми</h1>
     {% best_film %}
     {% film_list_info %}
     {% best_film %}
+    <form method = "POST" id="reviewForm">
+        <h2>Надішліть відгук про наш хостинг!</h2>
+        {% csrf_token %}
+        {{form.as_p}}
+        <button>Відправити</button>
+    </form>
 {% endblock %}
 
 {% block script %}
 <script src="{% static 'film_app/js/jquery-3.7.1.min.js' %}"></script>
 <script src="{% static 'film_app/js/ajax.js' %}"></script>
+<script src="{% static 'film_app/js/form_ajax.js'%}"></script>
 {% endblock %}

@@ -1,12 +1,18 @@
 from django.shortcuts import render, redirect
 from .models import Film
 from django.http import JsonResponse
+from .forms import ReviewForm
 import json
 # Create your views here.
 
 def render_all_films(request):
     all_films = Film.objects.all()
-    return render(request, "film_app/all_films.html", {"list_films" : all_films, 'is_page_favourites':False})
+    form = ReviewForm()
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+    return render(request, "film_app/all_films.html", {"list_films" : all_films, 'is_page_favourites':False, "form": form})
 
 # Функція додає фільм в улюблені через кукі.
 def add_to_favourite(request, film_id):
